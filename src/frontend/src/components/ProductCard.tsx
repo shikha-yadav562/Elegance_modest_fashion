@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { IMAGES } from "../assets/images";
 import type { Product } from "../backend";
 import { addToCart } from "../utils/cart";
 
@@ -34,10 +35,10 @@ export default function ProductCard({
   const imageUrl =
     product.imageUrl ||
     (cat === "abayas"
-      ? "/assets/generated/product-abaya.dim_600x800.jpg"
+      ? IMAGES.productAbaya
       : cat === "dresses"
-        ? "/assets/generated/product-dress.dim_600x800.jpg"
-        : "/assets/generated/product-ethnic-set.dim_600x800.jpg");
+        ? IMAGES.productDress
+        : IMAGES.productEthnicSet);
 
   const secondImage = hoverImage || imageUrl;
 

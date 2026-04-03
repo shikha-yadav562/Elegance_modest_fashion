@@ -9,6 +9,7 @@ import { Link, useParams } from "@tanstack/react-router";
 import { ChevronRight, Minus, Package, Plus, Star } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { IMAGES } from "../assets/images";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
@@ -25,7 +26,7 @@ const SAMPLE_PRODUCTS = [
     description:
       "Exquisite hand-embroidered ethnic set crafted from premium lawn fabric. Features intricate gold thread work and a flattering silhouette perfect for special occasions.",
     sizes: ["S", "M", "L", "XL"],
-    imageUrl: "/assets/generated/product-ethnic-set.dim_600x800.jpg",
+    imageUrl: IMAGES.productEthnicSet,
     category: "ethnicSets",
   },
   {
@@ -36,7 +37,7 @@ const SAMPLE_PRODUCTS = [
     description:
       "An elegant flowing abaya with hand-applied gold detailing. Cut from luxurious crepe fabric that moves gracefully with every step.",
     sizes: ["S", "M", "L"],
-    imageUrl: "/assets/generated/product-abaya.dim_600x800.jpg",
+    imageUrl: IMAGES.productAbaya,
     category: "abayas",
   },
   {
@@ -47,7 +48,7 @@ const SAMPLE_PRODUCTS = [
     description:
       "Flowing maxi dress in dusty rose with delicate floral embroidery. Modest coverage with long sleeves and a graceful hemline.",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    imageUrl: "/assets/generated/product-dress.dim_600x800.jpg",
+    imageUrl: IMAGES.productDress,
     category: "dresses",
   },
   {
@@ -58,7 +59,7 @@ const SAMPLE_PRODUCTS = [
     description:
       "Pearl-toned ethnic set with intricate bead work and a beautifully structured cut.",
     sizes: ["M", "L", "XL"],
-    imageUrl: "/assets/generated/product-ethnic-set.dim_600x800.jpg",
+    imageUrl: IMAGES.productEthnicSet,
     category: "ethnicSets",
   },
 ];
@@ -122,9 +123,7 @@ export default function ProductDetailPage() {
       id: displayProduct.id,
       name: displayProduct.name,
       price: Number(displayProduct.price),
-      image:
-        displayProduct.imageUrl ||
-        "/assets/generated/product-ethnic-set.dim_600x800.jpg",
+      image: displayProduct.imageUrl || IMAGES.productEthnicSet,
       size: selectedSize || String(displayProduct.sizes[0] ?? "M"),
       quantity,
     });
@@ -183,10 +182,7 @@ export default function ProductDetailPage() {
             aria-label="Zoom product image"
           >
             <img
-              src={
-                displayProduct.imageUrl ||
-                "/assets/generated/product-ethnic-set.dim_600x800.jpg"
-              }
+              src={displayProduct.imageUrl || IMAGES.productEthnicSet}
               alt={displayProduct.name}
               className="w-full object-cover aspect-[3/4]"
             />

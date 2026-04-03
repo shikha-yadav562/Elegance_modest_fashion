@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { IMAGES } from "../assets/images";
 import { getCartCount } from "../utils/cart";
 
 const COLLECTION_LINKS = [
@@ -18,15 +19,9 @@ const ZEWAR_LINKS = [
   "Ada Collection",
 ];
 
-const COLLECTION_IMAGES = [
-  "/assets/generated/editorial-abaya-1.dim_600x800.jpg",
-  "/assets/generated/collection-abaya-1.dim_500x700.jpg",
-];
+const COLLECTION_IMAGES = [IMAGES.editorialAbaya1, IMAGES.collectionAbaya1];
 
-const ZEWAR_IMAGES = [
-  "/assets/generated/collection-abaya-4.dim_500x700.jpg",
-  "/assets/generated/collection-abaya-5.dim_500x700.jpg",
-];
+const ZEWAR_IMAGES = [IMAGES.collectionAbaya4, IMAGES.collectionAbaya5];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

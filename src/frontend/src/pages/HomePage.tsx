@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { IMAGES } from "../assets/images";
 import Footer from "../components/Footer";
 import MarqueeBanner from "../components/MarqueeBanner";
 import Navbar from "../components/Navbar";
@@ -29,7 +30,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Exquisite embroidered abaya with intricate gold threadwork",
     sizes: ["S", "M", "L", "XL"],
-    imageUrl: "/assets/generated/lookbook-abaya-emerald.dim_600x900.jpg",
+    imageUrl: IMAGES.lookbookAbayaEmerald,
     category: "abayas",
   },
   {
@@ -40,7 +41,7 @@ const SAMPLE_PRODUCTS = [
     description:
       "Flowing abaya with gold detailing, perfect for special occasions",
     sizes: ["S", "M", "L"],
-    imageUrl: "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
+    imageUrl: IMAGES.editorialAbayaBurgundy,
     category: "abayas",
   },
   {
@@ -50,7 +51,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Elegant ivory abaya with delicate hand embroidery",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    imageUrl: "/assets/generated/editorial-abaya-blush.dim_600x900.jpg",
+    imageUrl: IMAGES.editorialAbayaBlush,
     category: "abayas",
   },
   {
@@ -60,7 +61,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Premium pearl-toned abaya with delicate embroidery",
     sizes: ["M", "L", "XL"],
-    imageUrl: "/assets/generated/editorial-abaya-navy.dim_600x900.jpg",
+    imageUrl: IMAGES.editorialAbayaNavy,
     category: "abayas",
   },
   {
@@ -71,7 +72,7 @@ const SAMPLE_PRODUCTS = [
     description:
       "Specially curated ivory bridal abaya for your most precious moments",
     sizes: ["S", "M", "L"],
-    imageUrl: "/assets/generated/lookbook-abaya-ivory.dim_600x900.jpg",
+    imageUrl: IMAGES.lookbookAbayaIvory,
     category: "abayas",
   },
   {
@@ -81,7 +82,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Comfortable daily wear abaya in warm terracotta tones",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    imageUrl: "/assets/generated/lookbook-abaya-mauve.dim_600x900.jpg",
+    imageUrl: IMAGES.lookbookAbayaMauve,
     category: "abayas",
   },
   {
@@ -91,7 +92,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Rich emerald full-length abaya for formal occasions",
     sizes: ["M", "L", "XL"],
-    imageUrl: "/assets/generated/hero-slide-3-emerald.dim_1920x1080.jpg",
+    imageUrl: IMAGES.heroSlide3Emerald,
     category: "abayas",
   },
   {
@@ -101,7 +102,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Gorgeous blush abaya for festivals and celebrations",
     sizes: ["S", "M", "L"],
-    imageUrl: "/assets/generated/hero-slide-2-ivory.dim_1920x1080.jpg",
+    imageUrl: IMAGES.heroSlide2Ivory,
     category: "abayas",
   },
 ];
@@ -130,7 +131,7 @@ const SAMPLE_TESTIMONIALS = [
 // Hero slides — each with a distinct color theme
 const HERO_SLIDES = [
   {
-    bg: "/assets/generated/hero-slide-1-gold.dim_1920x1080.jpg",
+    bg: IMAGES.heroSlide1Gold,
     label: "New Season 2026",
     heading: "Elegance in",
     headingAccent: "Modesty",
@@ -147,7 +148,7 @@ const HERO_SLIDES = [
       "border-amber-300 text-amber-300 hover:bg-amber-300 hover:text-black",
   },
   {
-    bg: "/assets/generated/hero-slide-2-ivory.dim_1920x1080.jpg",
+    bg: IMAGES.heroSlide2Ivory,
     label: "Signature Collection",
     heading: "Kuch",
     headingAccent: "Khaas",
@@ -164,7 +165,7 @@ const HERO_SLIDES = [
       "border-slate-200 text-slate-200 hover:bg-slate-200 hover:text-slate-900",
   },
   {
-    bg: "/assets/generated/hero-slide-3-emerald.dim_1920x1080.jpg",
+    bg: IMAGES.heroSlide3Emerald,
     label: "Curated Exclusives",
     heading: "Grace in",
     headingAccent: "Every Step",
@@ -185,7 +186,7 @@ const HERO_SLIDES = [
 // Vastranand-style framed editorial models
 const FRAMED_MODELS = [
   {
-    img: "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
+    img: IMAGES.editorialAbayaBurgundy,
     name: "Scarlet Royale",
     subtitle: "Embroidered Abaya",
     price: "₹ 11,500",
@@ -194,7 +195,7 @@ const FRAMED_MODELS = [
     bg: "bg-rose-50",
   },
   {
-    img: "/assets/generated/editorial-abaya-blush.dim_600x900.jpg",
+    img: IMAGES.editorialAbayaBlush,
     name: "Blush Serenade",
     subtitle: "Pearl Embellished Abaya",
     price: "₹ 9,800",
@@ -203,7 +204,7 @@ const FRAMED_MODELS = [
     bg: "bg-pink-50",
   },
   {
-    img: "/assets/generated/editorial-abaya-navy.dim_600x900.jpg",
+    img: IMAGES.editorialAbayaNavy,
     name: "Midnight Majesty",
     subtitle: "Silver Work Abaya",
     price: "₹ 13,200",
@@ -229,9 +230,9 @@ const FLOAT_CLASSES = [
 
 const FEATURED_PRODUCT = SAMPLE_PRODUCTS[1];
 const FEATURED_IMAGES = [
-  "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
-  "/assets/generated/editorial-abaya-blush.dim_600x900.jpg",
-  "/assets/generated/editorial-abaya-navy.dim_600x900.jpg",
+  IMAGES.editorialAbayaBurgundy,
+  IMAGES.editorialAbayaBlush,
+  IMAGES.editorialAbayaNavy,
 ];
 
 export default function HomePage() {
@@ -665,19 +666,19 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
             {[
               {
-                img: "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
+                img: IMAGES.editorialAbayaBurgundy,
                 title: "Scarlet Collection",
                 year: "SS 2026",
                 align: "items-start",
               },
               {
-                img: "/assets/generated/lookbook-abaya-mauve.dim_600x900.jpg",
+                img: IMAGES.lookbookAbayaMauve,
                 title: "Petal Whisper",
                 year: "SS 2026",
                 align: "items-center",
               },
               {
-                img: "/assets/generated/lookbook-abaya-emerald.dim_600x900.jpg",
+                img: IMAGES.lookbookAbayaEmerald,
                 title: "Forest Elegance",
                 year: "SS 2026",
                 align: "items-end",
@@ -765,22 +766,22 @@ export default function HomePage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-0">
           {[
             {
-              img: "/assets/generated/hero-slide-1-gold.dim_1920x1080.jpg",
+              img: IMAGES.heroSlide1Gold,
               label: "Abayas",
               color: "from-amber-900/70",
             },
             {
-              img: "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
+              img: IMAGES.editorialAbayaBurgundy,
               label: "Kuch Khaas",
               color: "from-rose-900/70",
             },
             {
-              img: "/assets/generated/hero-slide-2-ivory.dim_1920x1080.jpg",
+              img: IMAGES.heroSlide2Ivory,
               label: "Bridal",
               color: "from-slate-800/70",
             },
             {
-              img: "/assets/generated/hero-slide-3-emerald.dim_1920x1080.jpg",
+              img: IMAGES.heroSlide3Emerald,
               label: "Zewar",
               color: "from-emerald-900/70",
             },
@@ -939,27 +940,27 @@ export default function HomePage() {
         <div className="flex gap-5 px-4 sm:px-8 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
           {[
             {
-              img: "/assets/generated/editorial-abaya-blush.dim_600x900.jpg",
+              img: IMAGES.editorialAbayaBlush,
               caption: "Blush Affair",
               tag: "Bridal Edit",
             },
             {
-              img: "/assets/generated/lookbook-abaya-mauve.dim_600x900.jpg",
+              img: IMAGES.lookbookAbayaMauve,
               caption: "Petal Dreams",
               tag: "Spring 2026",
             },
             {
-              img: "/assets/generated/editorial-abaya-navy.dim_600x900.jpg",
+              img: IMAGES.editorialAbayaNavy,
               caption: "Midnight Allure",
               tag: "Night Collection",
             },
             {
-              img: "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
+              img: IMAGES.editorialAbayaBurgundy,
               caption: "Scarlet Nights",
               tag: "Festive Edit",
             },
             {
-              img: "/assets/generated/lookbook-abaya-ivory.dim_600x900.jpg",
+              img: IMAGES.lookbookAbayaIvory,
               caption: "Velvet Elegance",
               tag: "Kuch Khaas",
             },
@@ -1048,25 +1049,25 @@ export default function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                img: "/assets/generated/lookbook-abaya-emerald.dim_600x900.jpg",
+                img: IMAGES.lookbookAbayaEmerald,
                 name: "Forest Royale Abaya",
                 price: "₹ 11,500",
                 hearts: 248,
               },
               {
-                img: "/assets/generated/editorial-abaya-burgundy.dim_600x900.jpg",
+                img: IMAGES.editorialAbayaBurgundy,
                 name: "Scarlet Evening Abaya",
                 price: "₹ 13,200",
                 hearts: 319,
               },
               {
-                img: "/assets/generated/lookbook-abaya-mauve.dim_600x900.jpg",
+                img: IMAGES.lookbookAbayaMauve,
                 name: "Lavender Bridal Abaya",
                 price: "₹ 15,000",
                 hearts: 412,
               },
               {
-                img: "/assets/generated/editorial-abaya-blush.dim_600x900.jpg",
+                img: IMAGES.editorialAbayaBlush,
                 name: "Blush Pearl Abaya",
                 price: "₹ 9,800",
                 hearts: 287,

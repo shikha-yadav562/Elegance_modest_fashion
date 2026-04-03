@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@tanstack/react-router";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { IMAGES } from "../assets/images";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
@@ -23,7 +24,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Exquisite embroidered ethnic set",
     sizes: ["S", "M", "L", "XL"],
-    imageUrl: "/assets/generated/product-ethnic-set.dim_600x800.jpg",
+    imageUrl: IMAGES.productEthnicSet,
     category: "ethnicSets",
   },
   {
@@ -33,7 +34,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Flowing abaya with gold detailing",
     sizes: ["S", "M", "L"],
-    imageUrl: "/assets/generated/product-abaya.dim_600x800.jpg",
+    imageUrl: IMAGES.productAbaya,
     category: "abayas",
   },
   {
@@ -43,7 +44,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Elegant modest maxi dress",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    imageUrl: "/assets/generated/product-dress.dim_600x800.jpg",
+    imageUrl: IMAGES.productDress,
     category: "dresses",
   },
   {
@@ -53,7 +54,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Premium pearl-toned ethnic set",
     sizes: ["M", "L", "XL"],
-    imageUrl: "/assets/generated/product-ethnic-set.dim_600x800.jpg",
+    imageUrl: IMAGES.productEthnicSet,
     category: "ethnicSets",
   },
   {
@@ -63,7 +64,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Lightweight ivory abaya for everyday elegance",
     sizes: ["S", "M", "L"],
-    imageUrl: "/assets/generated/product-abaya.dim_600x800.jpg",
+    imageUrl: IMAGES.productAbaya,
     category: "abayas",
   },
   {
@@ -73,7 +74,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Warm-toned embroidered kurta",
     sizes: ["S", "M", "L", "XL"],
-    imageUrl: "/assets/generated/product-ethnic-set.dim_600x800.jpg",
+    imageUrl: IMAGES.productEthnicSet,
     category: "ethnicSets",
   },
   {
@@ -83,7 +84,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: false,
     description: "Floral sage modest dress",
     sizes: ["M", "L", "XL"],
-    imageUrl: "/assets/generated/product-dress.dim_600x800.jpg",
+    imageUrl: IMAGES.productDress,
     category: "dresses",
   },
   {
@@ -93,7 +94,7 @@ const SAMPLE_PRODUCTS = [
     isNewArrival: true,
     description: "Luxurious velvet abaya for special occasions",
     sizes: ["S", "M", "L", "XL"],
-    imageUrl: "/assets/generated/product-abaya.dim_600x800.jpg",
+    imageUrl: IMAGES.productAbaya,
     category: "abayas",
   },
 ];
