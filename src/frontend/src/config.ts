@@ -34,11 +34,10 @@ export async function loadConfig(): Promise<Config> {
     return configCache;
   }
 
-  const envBaseUrl = (typeof process !== "undefined" && process.env?.BASE_URL) || "/";
-  const baseUrl = envBaseUrl.endsWith("/") ? envBaseUrl : `${envBaseUrl}/`;
-
+  // Try to load env.json (only available in ICP / Caffeine deployments)
   try {
-    const response = await fetch(`${baseUrl}env.json`);
+    const envBaseUrl = "/";
+    const response = await fetch(`${envBaseUrl}env.json`);
     if (!response.ok) throw new Error("env.json not found");
     const config = (await response.json()) as JsonConfig;
 
@@ -47,7 +46,7 @@ export async function loadConfig(): Promise<Config> {
         ? config.backend_canister_id
         : null;
 
-    const fullConfig: Config = {
+    configCache = {
       backend_host:
         config.backend_host === "undefined" ? undefined : config.backend_host,
       backend_canister_id: canisterId,
@@ -62,12 +61,10 @@ export async function loadConfig(): Promise<Config> {
           ? undefined
           : config.ii_derivation_origin,
     };
-    configCache = fullConfig;
-    return fullConfig;
+    return configCache;
   } catch {
-    // On Vercel or any environment without env.json, return safe defaults
-    // so the UI renders without crashing
-    const fallbackConfig: Config = {
+    // No env.json — running on Vercel or local static server without ICP backend
+    configCache = {
       backend_host: undefined,
       backend_canister_id: null,
       storage_gateway_url: DEFAULT_STORAGE_GATEWAY_URL,
@@ -75,8 +72,7 @@ export async function loadConfig(): Promise<Config> {
       project_id: DEFAULT_PROJECT_ID,
       ii_derivation_origin: undefined,
     };
-    configCache = fallbackConfig;
-    return fallbackConfig;
+    return configCache;
   }
 }
 
@@ -88,7 +84,7 @@ function extractAgentErrorMessage(error: string): string {
 
 function processError(e: unknown): never {
   if (e && typeof e === "object" && "message" in e) {
-    throw new Error(extractAgentErrorMessage(`${(e as { message: string }).message}`));
+    throw new Error(extractAgentErrorMessage(`${e.message}`));
   }
   throw e;
 }
@@ -97,7 +93,6 @@ async function maybeLoadMockBackend(): Promise<backendInterface | null> {
   if (import.meta.env.VITE_USE_MOCK !== "true") {
     return null;
   }
-
   try {
     const mockModules = import.meta.glob("./mocks/backend.{ts,tsx,js,jsx}");
     const path = Object.keys(mockModules)[0];
@@ -113,15 +108,13 @@ async function maybeLoadMockBackend(): Promise<backendInterface | null> {
 
 export async function createActorWithConfig(
   options?: CreateActorOptions,
-): Promise<backendInterface | null> {
+): Promise<backendInterface> {
   const mock = await maybeLoadMockBackend();
   if (mock) return mock;
 
   const config = await loadConfig();
-
-  // No canister available (e.g. Vercel deployment without ICP backend)
   if (!config.backend_canister_id) {
-    return null;
+    throw new Error("No backend canister configured");
   }
 
   const resolvedOptions = options ?? {};
@@ -131,17 +124,10 @@ export async function createActorWithConfig(
   });
   if (config.backend_host?.includes("localhost")) {
     await agent.fetchRootKey().catch((err) => {
-      console.warn(
-        "Unable to fetch root key. Check to ensure that your local replica is running",
-      );
+      console.warn("Unable to fetch root key. Check your local replica is running");
       console.error(err);
     });
   }
-  const actorOptions = {
-    ...resolvedOptions,
-    agent: agent,
-    processError,
-  };
 
   const storageClient = new StorageClient(
     config.bucket_name,
@@ -172,6 +158,6 @@ export async function createActorWithConfig(
     config.backend_canister_id,
     uploadFile,
     downloadFile,
-    actorOptions,
+    { ...resolvedOptions, agent, processError },
   );
 }
