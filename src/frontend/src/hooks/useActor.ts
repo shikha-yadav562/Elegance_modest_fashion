@@ -10,7 +10,7 @@ async function maybeCreateActor(
   const config = await loadConfig();
   // No canister on Vercel — skip actor creation entirely
   if (!config.backend_canister_id) return null;
-  const { createActorWithConfig } = await import("../createActorWithConfig");
+  const { createActorWithConfig } = await import("../config");
   return createActorWithConfig(
     identity ? { agentOptions: { identity } } : undefined,
   );
