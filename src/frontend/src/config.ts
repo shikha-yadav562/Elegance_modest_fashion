@@ -1,43 +1,177 @@
-// Simplified config — works on both Caffeine (ICP) and Vercel.
-// When env.json is absent (Vercel), backend is disabled and UI uses local fallback data.
+import {
+  createActor,
+  type backendInterface,
+  type CreateActorOptions,
+  ExternalBlob,
+} from "./backend";
+import { StorageClient } from "./utils/StorageClient";
+import { HttpAgent } from "@icp-sdk/core/agent";
 
-export interface Config {
+const DEFAULT_STORAGE_GATEWAY_URL = "https://blob.caffeine.ai";
+const DEFAULT_BUCKET_NAME = "default-bucket";
+const DEFAULT_PROJECT_ID = "0000000-0000-0000-0000-00000000000";
+
+interface JsonConfig {
+  backend_host: string;
+  backend_canister_id: string;
+  project_id: string;
+  ii_derivation_origin: string;
+}
+
+interface Config {
+  backend_host?: string;
   backend_canister_id: string | null;
   storage_gateway_url: string;
   bucket_name: string;
   project_id: string;
   ii_derivation_origin?: string;
-  backend_host?: string;
 }
-
-const NOOP_CONFIG: Config = {
-  backend_canister_id: null,
-  storage_gateway_url: "https://blob.caffeine.ai",
-  bucket_name: "default-bucket",
-  project_id: "00000000-0000-0000-0000-000000000000",
-};
 
 let configCache: Config | null = null;
 
 export async function loadConfig(): Promise<Config> {
-  if (configCache) return configCache;
-  try {
-    const res = await fetch("/env.json");
-    if (!res.ok) throw new Error("env.json not found");
-    const json = await res.json();
-    configCache = {
-      backend_host: json.backend_host === "undefined" ? undefined : json.backend_host,
-      backend_canister_id:
-        json.backend_canister_id === "undefined" ? null : json.backend_canister_id,
-      storage_gateway_url: json.storage_gateway_url ?? "https://blob.caffeine.ai",
-      bucket_name: json.bucket_name ?? "default-bucket",
-      project_id: json.project_id !== "undefined" ? json.project_id : "00000000-0000-0000-0000-000000000000",
-      ii_derivation_origin:
-        json.ii_derivation_origin === "undefined" ? undefined : json.ii_derivation_origin,
-    };
-    return configCache;
-  } catch {
-    configCache = NOOP_CONFIG;
+  if (configCache) {
     return configCache;
   }
+
+  const envBaseUrl = (typeof process !== "undefined" && process.env?.BASE_URL) || "/";
+  const baseUrl = envBaseUrl.endsWith("/") ? envBaseUrl : `${envBaseUrl}/`;
+
+  try {
+    const response = await fetch(`${baseUrl}env.json`);
+    if (!response.ok) throw new Error("env.json not found");
+    const config = (await response.json()) as JsonConfig;
+
+    const canisterId =
+      config.backend_canister_id && config.backend_canister_id !== "undefined"
+        ? config.backend_canister_id
+        : null;
+
+    const fullConfig: Config = {
+      backend_host:
+        config.backend_host === "undefined" ? undefined : config.backend_host,
+      backend_canister_id: canisterId,
+      storage_gateway_url: DEFAULT_STORAGE_GATEWAY_URL,
+      bucket_name: DEFAULT_BUCKET_NAME,
+      project_id:
+        config.project_id !== "undefined"
+          ? config.project_id
+          : DEFAULT_PROJECT_ID,
+      ii_derivation_origin:
+        config.ii_derivation_origin === "undefined"
+          ? undefined
+          : config.ii_derivation_origin,
+    };
+    configCache = fullConfig;
+    return fullConfig;
+  } catch {
+    // On Vercel or any environment without env.json, return safe defaults
+    // so the UI renders without crashing
+    const fallbackConfig: Config = {
+      backend_host: undefined,
+      backend_canister_id: null,
+      storage_gateway_url: DEFAULT_STORAGE_GATEWAY_URL,
+      bucket_name: DEFAULT_BUCKET_NAME,
+      project_id: DEFAULT_PROJECT_ID,
+      ii_derivation_origin: undefined,
+    };
+    configCache = fallbackConfig;
+    return fallbackConfig;
+  }
+}
+
+function extractAgentErrorMessage(error: string): string {
+  const errorString = String(error);
+  const match = errorString.match(/with message:\s*'([^']+)'/s);
+  return match ? match[1] : errorString;
+}
+
+function processError(e: unknown): never {
+  if (e && typeof e === "object" && "message" in e) {
+    throw new Error(extractAgentErrorMessage(`${(e as { message: string }).message}`));
+  }
+  throw e;
+}
+
+async function maybeLoadMockBackend(): Promise<backendInterface | null> {
+  if (import.meta.env.VITE_USE_MOCK !== "true") {
+    return null;
+  }
+
+  try {
+    const mockModules = import.meta.glob("./mocks/backend.{ts,tsx,js,jsx}");
+    const path = Object.keys(mockModules)[0];
+    if (!path) return null;
+    const mod = (await mockModules[path]()) as {
+      mockBackend?: backendInterface;
+    };
+    return mod.mockBackend ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function createActorWithConfig(
+  options?: CreateActorOptions,
+): Promise<backendInterface | null> {
+  const mock = await maybeLoadMockBackend();
+  if (mock) return mock;
+
+  const config = await loadConfig();
+
+  // No canister available (e.g. Vercel deployment without ICP backend)
+  if (!config.backend_canister_id) {
+    return null;
+  }
+
+  const resolvedOptions = options ?? {};
+  const agent = new HttpAgent({
+    ...resolvedOptions.agentOptions,
+    host: config.backend_host,
+  });
+  if (config.backend_host?.includes("localhost")) {
+    await agent.fetchRootKey().catch((err) => {
+      console.warn(
+        "Unable to fetch root key. Check to ensure that your local replica is running",
+      );
+      console.error(err);
+    });
+  }
+  const actorOptions = {
+    ...resolvedOptions,
+    agent: agent,
+    processError,
+  };
+
+  const storageClient = new StorageClient(
+    config.bucket_name,
+    config.storage_gateway_url,
+    config.backend_canister_id,
+    config.project_id,
+    agent,
+  );
+
+  const MOTOKO_DEDUPLICATION_SENTINEL = "!caf!";
+
+  const uploadFile = async (file: ExternalBlob): Promise<Uint8Array> => {
+    const { hash } = await storageClient.putFile(
+      await file.getBytes(),
+      file.onProgress,
+    );
+    return new TextEncoder().encode(MOTOKO_DEDUPLICATION_SENTINEL + hash);
+  };
+
+  const downloadFile = async (bytes: Uint8Array): Promise<ExternalBlob> => {
+    const hashWithPrefix = new TextDecoder().decode(new Uint8Array(bytes));
+    const hash = hashWithPrefix.substring(MOTOKO_DEDUPLICATION_SENTINEL.length);
+    const url = await storageClient.getDirectURL(hash);
+    return ExternalBlob.fromURL(url);
+  };
+
+  return createActor(
+    config.backend_canister_id,
+    uploadFile,
+    downloadFile,
+    actorOptions,
+  );
 }

@@ -8,7 +8,6 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: false,
     minify: false,
-    assetsDir: "assets",
   },
   css: {
     postcss: "./postcss.config.js",
@@ -20,9 +19,23 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:4943",
+        changeOrigin: true,
+      },
+    },
+  },
+  plugins: [
+    react(),
+  ],
   resolve: {
     alias: [
+      {
+        find: "declarations",
+        replacement: fileURLToPath(new URL("../declarations", import.meta.url)),
+      },
       {
         find: "@",
         replacement: fileURLToPath(new URL("./src", import.meta.url)),
