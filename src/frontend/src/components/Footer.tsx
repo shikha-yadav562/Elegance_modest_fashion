@@ -129,17 +129,7 @@ export default function Footer() {
           <p className="font-sans text-xs text-soft-gray">
             © {year} Modesty by Nida Khan. All Rights Reserved.
           </p>
-          <p className="font-sans text-xs text-soft-gray">
-            Built with ♥ using{" "}
-            <a
-              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-gold transition-colors"
-            >
-              caffeine.ai
-            </a>
-          </p>
+         
         </div>
       </div>
     </footer>
