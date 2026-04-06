@@ -20,7 +20,7 @@ interface JsonConfig {
 
 interface Config {
   backend_host?: string;
-  backend_canister_id: string | null;
+  backend_canister_id: string;
   storage_gateway_url: string;
   bucket_name: string;
   project_id: string;
@@ -33,26 +33,24 @@ export async function loadConfig(): Promise<Config> {
   if (configCache) {
     return configCache;
   }
-
-  const backendCanisterId = process.env.CANISTER_ID_BACKEND || null;
+  const backendCanisterId = process.env.CANISTER_ID_BACKEND;
   const envBaseUrl = process.env.BASE_URL || "/";
   const baseUrl = envBaseUrl.endsWith("/") ? envBaseUrl : `${envBaseUrl}/`;
-
   try {
     const response = await fetch(`${baseUrl}env.json`);
-    if (!response.ok) throw new Error("env.json not found");
     const config = (await response.json()) as JsonConfig;
+    if (!backendCanisterId && config.backend_canister_id === "undefined") {
+      console.error("CANISTER_ID_BACKEND is not set");
+      throw new Error("CANISTER_ID_BACKEND is not set");
+    }
 
-    const canisterId =
-      config.backend_canister_id !== "undefined"
-        ? config.backend_canister_id
-        : backendCanisterId;
-
-    const fullConfig: Config = {
+    const fullConfig = {
       backend_host:
         config.backend_host === "undefined" ? undefined : config.backend_host,
-      backend_canister_id: canisterId,
-      storage_gateway_url: process.env.STORAGE_GATEWAY_URL ?? DEFAULT_STORAGE_GATEWAY_URL,
+      backend_canister_id: (config.backend_canister_id === "undefined"
+        ? backendCanisterId
+        : config.backend_canister_id) as string,
+      storage_gateway_url: process.env.STORAGE_GATEWAY_URL ?? "nogateway",
       bucket_name: DEFAULT_BUCKET_NAME,
       project_id:
         config.project_id !== "undefined"
@@ -66,8 +64,11 @@ export async function loadConfig(): Promise<Config> {
     configCache = fullConfig;
     return fullConfig;
   } catch {
-    // env.json not available (e.g. Vercel) — return safe defaults, no canister
-    const fallbackConfig: Config = {
+    if (!backendCanisterId) {
+      console.error("CANISTER_ID_BACKEND is not set");
+      throw new Error("CANISTER_ID_BACKEND is not set");
+    }
+    const fallbackConfig = {
       backend_host: undefined,
       backend_canister_id: backendCanisterId,
       storage_gateway_url: DEFAULT_STORAGE_GATEWAY_URL,
@@ -75,7 +76,6 @@ export async function loadConfig(): Promise<Config> {
       project_id: DEFAULT_PROJECT_ID,
       ii_derivation_origin: undefined,
     };
-    configCache = fallbackConfig;
     return fallbackConfig;
   }
 }
@@ -99,12 +99,17 @@ async function maybeLoadMockBackend(): Promise<backendInterface | null> {
   }
 
   try {
+    // If VITE_USE_MOCK is enabled, try to load a mock backend module *if it exists*.
+    // We use import.meta.glob so builds don't fail when the mock file is absent.
     const mockModules = import.meta.glob("./mocks/backend.{ts,tsx,js,jsx}");
+
     const path = Object.keys(mockModules)[0];
     if (!path) return null;
+
     const mod = (await mockModules[path]()) as {
       mockBackend?: backendInterface;
     };
+
     return mod.mockBackend ?? null;
   } catch {
     return null;
@@ -113,31 +118,30 @@ async function maybeLoadMockBackend(): Promise<backendInterface | null> {
 
 export async function createActorWithConfig(
   options?: CreateActorOptions,
-): Promise<backendInterface | null> {
+): Promise<backendInterface> {
+  // Attempt to load mock backend if enabled
   const mock = await maybeLoadMockBackend();
-  if (mock) return mock;
+  if (mock) {
+    return mock;
+  }
 
   const config = await loadConfig();
-
-  // No canister ID — running on Vercel or without ICP backend
-  if (!config.backend_canister_id) return null;
-
   const resolvedOptions = options ?? {};
   const agent = new HttpAgent({
     ...resolvedOptions.agentOptions,
     host: config.backend_host,
   });
-
   if (config.backend_host?.includes("localhost")) {
     await agent.fetchRootKey().catch((err) => {
-      console.warn("Unable to fetch root key. Check your local replica.");
+      console.warn(
+        "Unable to fetch root key. Check to ensure that your local replica is running",
+      );
       console.error(err);
     });
   }
-
   const actorOptions = {
     ...resolvedOptions,
-    agent,
+    agent: agent,
     processError,
   };
 

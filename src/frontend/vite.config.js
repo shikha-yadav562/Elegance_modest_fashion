@@ -12,6 +12,12 @@ export default defineConfig({
   css: {
     postcss: "./postcss.config.js",
   },
+  define: {
+    "process.env.CANISTER_ID_BACKEND": JSON.stringify(""),
+    "process.env.DFX_NETWORK": JSON.stringify(""),
+    "process.env.II_URL": JSON.stringify("https://identity.internetcomputer.org/"),
+    "process.env.STORAGE_GATEWAY_URL": JSON.stringify("https://blob.caffeine.ai"),
+  },
   optimizeDeps: {
     esbuildOptions: {
       define: {
@@ -19,16 +25,15 @@ export default defineConfig({
       },
     },
   },
-  define: {
-    "process.env.CANISTER_ID_BACKEND": JSON.stringify(""),
-    "process.env.DFX_NETWORK": JSON.stringify(""),
-    "process.env.II_URL": JSON.stringify("https://identity.internetcomputer.org/"),
-    "process.env.STORAGE_GATEWAY_URL": JSON.stringify("https://blob.caffeine.ai"),
-    "process.env.BASE_URL": JSON.stringify("/"),
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:4943",
+        changeOrigin: true,
+      },
+    },
   },
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   resolve: {
     alias: [
       {

@@ -86,7 +86,6 @@ export default function Navbar() {
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              {/* Left flourish */}
               <path
                 d="M2 16 C8 8, 18 6, 26 12"
                 stroke="currentColor"
@@ -99,7 +98,6 @@ export default function Navbar() {
                 strokeWidth="1.2"
                 strokeLinecap="round"
               />
-              {/* Center star */}
               <circle cx="32" cy="16" r="3" fill="currentColor" opacity="0.9" />
               <circle
                 cx="32"
@@ -109,7 +107,6 @@ export default function Navbar() {
                 strokeWidth="0.8"
                 opacity="0.5"
               />
-              {/* Top & bottom tiny accents */}
               <line
                 x1="32"
                 y1="6"
@@ -128,7 +125,6 @@ export default function Navbar() {
                 strokeWidth="1"
                 strokeLinecap="round"
               />
-              {/* Right flourish */}
               <path
                 d="M62 16 C56 8, 46 6, 38 12"
                 stroke="currentColor"
@@ -144,7 +140,28 @@ export default function Navbar() {
             </svg>
           </div>
 
-       
+          {/* Brand name */}
+          <div className="flex flex-col items-start leading-none gap-0.5">
+            <span
+              className={`font-serif font-bold text-xl tracking-[0.35em] uppercase transition-colors duration-500 group-hover:text-gold ${
+                transparent
+                  ? "text-white font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
+                  : "text-charcoal"
+              }`}
+            >
+              ELEGANCE
+            </span>
+            <span
+              className={`font-script text-[13px] tracking-[0.15em] transition-colors duration-500 ${
+                transparent
+                  ? "text-amber-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
+                  : "text-gold-deep"
+              }`}
+            >
+              Modest Fashion
+            </span>
+          </div>
+        </Link>
 
         {/* RIGHT: Desktop nav links + icons */}
         <div className="flex-1 flex items-center justify-end">
@@ -308,14 +325,12 @@ export default function Navbar() {
             </li>
           </ul>
 
-          {/* Separator between nav links and icons — desktop only */}
           <div
             className={`hidden lg:block w-px h-4 mr-5 ${
               transparent ? "bg-white/30" : "bg-sand/60"
             }`}
           />
 
-          {/* Search icon — desktop only */}
           <button
             type="button"
             aria-label="Search"
@@ -328,7 +343,6 @@ export default function Navbar() {
             <Search size={18} aria-hidden="true" />
           </button>
 
-          {/* Cart */}
           <Link
             to="/cart"
             aria-label="View cart"
@@ -347,7 +361,6 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* Hamburger — mobile */}
           <button
             type="button"
             className={`lg:hidden ml-4 transition-colors ${

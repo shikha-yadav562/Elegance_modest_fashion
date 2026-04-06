@@ -1,4 +1,4 @@
-export const CART_KEY = "modesty_cart";
+export const CART_KEY = "elegant_cart";
 
 export interface CartItem {
   id: string;

@@ -11,10 +11,10 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="font-serif font-bold text-2xl tracking-[0.25em] uppercase text-charcoal">
-              MODESTY
+              ELEGANCE
             </div>
             <div className="font-script text-gold-deep text-sm mb-4">
-              by Nida Khan
+              Modest Fashion
             </div>
             <p className="font-sans text-sm text-soft-gray leading-relaxed">
               Celebrating modesty through elegant, premium fashion. Where faith
@@ -22,7 +22,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 mt-5">
               <a
-                href="https://instagram.com/ModestyByNidaKhan"
+                href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-charcoal hover:text-gold transition-colors"
@@ -113,7 +113,7 @@ export default function Footer() {
             <ul className="space-y-3 font-sans text-sm text-soft-gray">
               <li>Mumbai, India</li>
               <li>+91 98765 43210</li>
-              <li>hello@modestybynidakhan.com</li>
+              <li>hello@elegantmodestfashion.com</li>
               <li className="pt-1">
                 <span className="font-medium text-charcoal">Hours:</span>{" "}
                 Mon–Sat, 10am–7pm IST
@@ -127,9 +127,19 @@ export default function Footer() {
       <div className="border-t border-sand/70 py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-sans text-xs text-soft-gray">
-            © {year} Modesty by Nida Khan. All Rights Reserved.
+            © {year} Elegance Modest Fashion. All Rights Reserved.
           </p>
-         
+          <p className="font-sans text-xs text-soft-gray">
+            Built with ♥ using{" "}
+            <a
+              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gold transition-colors"
+            >
+              caffeine.ai
+            </a>
+          </p>
         </div>
       </div>
     </footer>

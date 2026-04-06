@@ -1,15 +1,20 @@
 import { Gift, Percent, Sparkles, Star, Tag, Truck } from "lucide-react";
 
 const items = [
-  { icon: Percent, text: "Flat 15% OFF on New Arrivals — Use Code: MNK15" },
+  { icon: Percent, text: "Flat 15% OFF on New Arrivals — Use Code: STYLE15" },
   { icon: Tag, text: "Festive Sale: Up to 40% OFF on Select Abayas" },
-  { icon: Truck, text: "Free Shipping across India on orders above ₹5,000" },
-  { icon: Gift, text: "Eid Special Combos — Shop & Save More" },
-  { icon: Star, text: "New Collection Drops Every Friday — Don't Miss Out!" },
+  {
+    icon: Truck,
+    text: "Free Shipping across India on orders above \u20b95,000",
+  },
+  { icon: Gift, text: "Eid Special Combos \u2014 Shop & Save More" },
+  {
+    icon: Star,
+    text: "New Collection Drops Every Friday \u2014 Don't Miss Out!",
+  },
   { icon: Sparkles, text: "WhatsApp us: +91 98765 43210 for Custom Orders" },
 ];
 
-// Repeat 3x for seamless scroll; keys include repetition index to avoid duplicates
 const repeated = [
   ...items.map((item) => ({ ...item, _k: `a-${item.text}` })),
   ...items.map((item) => ({ ...item, _k: `b-${item.text}` })),
@@ -36,7 +41,7 @@ export default function MarqueeBanner() {
                 aria-hidden="true"
               />
               {item.text}
-              <span className="ml-4 text-gold/40">✦</span>
+              <span className="ml-4 text-gold/40">✶</span>
             </span>
           );
         })}

@@ -111,7 +111,7 @@ const SAMPLE_TESTIMONIALS = [
   {
     name: "Fatima Sheikh",
     message:
-      "Absolutely stunning quality! The abaya I ordered is even more beautiful in person. Nida Khan has truly created something special.",
+      "Absolutely stunning quality! The abaya I ordered is even more beautiful in person. Our designers have truly created something special.",
     rating: BigInt(5),
   },
   {
@@ -134,7 +134,7 @@ const HERO_SLIDES = [
     bg: IMAGES.heroSlide1Gold,
     label: "New Season 2026",
     heading: "Elegance in",
-    headingAccent: "Modesty",
+    headingAccent: "Elegance",
     subheading: "Timeless Abayas for the Modern Woman",
     cta: "Shop Collection",
     ctaLink: "/products",
@@ -573,7 +573,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {[
             {
-              name: "MNK Picks",
+              name: "Our Picks",
               subtitle: "Hand-curated for you",
               color: "bg-charcoal",
             },
@@ -719,7 +719,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════
-          MNK PICKS
+          OUR PICKS
       ═══════════════════════════════════════════════ */}
       <section className="py-14" data-animate>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -729,12 +729,12 @@ export default function HomePage() {
                 Our curation
               </p>
               <h2 className="font-serif text-3xl text-charcoal uppercase tracking-widest">
-                MNK Picks
+                Our Picks
               </h2>
             </div>
             <Link
               to="/products"
-              data-ocid="mnk_picks.link"
+              data-ocid="our_picks.link"
               className="font-sans text-xs uppercase tracking-[0.25em] text-gold hover:text-gold-deep transition-colors border-b border-gold/40 pb-0.5"
             >
               View All
@@ -857,7 +857,7 @@ export default function HomePage() {
             <div className="flex flex-col gap-5">
               <div>
                 <p className="font-sans text-xs uppercase tracking-[0.4em] text-gold mb-2">
-                  Modesty by Nida Khan
+                  Elegance Modest Fashion
                 </p>
                 <h3 className="font-serif text-3xl font-bold text-charcoal">
                   {FEATURED_PRODUCT.name}
@@ -924,7 +924,7 @@ export default function HomePage() {
                 Style Journal
               </p>
               <h2 className="font-serif text-3xl sm:text-4xl text-charcoal uppercase tracking-wider">
-                Styled by Nida
+                Style Edit
               </h2>
             </div>
             <Link
