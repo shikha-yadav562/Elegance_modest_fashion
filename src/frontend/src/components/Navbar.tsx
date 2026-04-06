@@ -144,28 +144,7 @@ export default function Navbar() {
             </svg>
           </div>
 
-          {/* Brand name block — NO divider line between MODESTY and by Nida Khan */}
-          <div className="flex flex-col items-start leading-none gap-0.5">
-            <span
-              className={`font-serif font-bold text-xl tracking-[0.35em] uppercase transition-colors duration-500 group-hover:text-gold ${
-                transparent
-                  ? "text-white font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
-                  : "text-charcoal"
-              }`}
-            >
-              MODESTY
-            </span>
-            <span
-              className={`font-script text-[13px] tracking-[0.15em] transition-colors duration-500 ${
-                transparent
-                  ? "text-amber-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
-                  : "text-gold-deep"
-              }`}
-            >
-              by Nida Khan
-            </span>
-          </div>
-        </Link>
+       
 
         {/* RIGHT: Desktop nav links + icons */}
         <div className="flex-1 flex items-center justify-end">
